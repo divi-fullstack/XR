@@ -53,11 +53,11 @@ async function init() {
     orbitControls.enableDamping = true;
 
     const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath('/static/draco/');
+    dracoLoader.setDecoderPath('/draco/');
     const gltfLoader = new GLTFLoader();
     gltfLoader.setDRACOLoader(dracoLoader);
 
-    const gltf = await gltfLoader.loadAsync('/static/models/kira.glb');
+    const gltf = await gltfLoader.loadAsync('/models/kira.glb');
     gltf.scene.traverse(n => {
  
         if (n.name === 'head') OOI.head = n;
