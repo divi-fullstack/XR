@@ -211,7 +211,7 @@ renderer.setAnimationLoop( function () {
 
 
 function onSelectStart(event) {
-    orbitControls.enabled = true
+    orbitControls.enabled = false
     const controller = event.target;
     const intersections = getIntersections(controller); 
     console.log(event,'ff', intersections)
@@ -227,7 +227,7 @@ function onSelectStart(event) {
 }
 
 function onSelectEnd(event) {
-    orbitControls.enabled = false
+    orbitControls.enabled = true
     // console.log('end')
     // const controller = event.target;
     // if (transformControls.isTransforming) {
@@ -237,7 +237,7 @@ function onSelectEnd(event) {
     // renderer.render(scene, camera); 
 }
 
-function getIntersections(controller) {
+function getIntersections(controller) { 
     const tempMatrix = new THREE.Matrix4();
     tempMatrix.identity().extractRotation(controller.matrixWorld);
 
