@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { XRButton } from 'three/addons/webxr/XRButton.js';
-import { XRControllerModelFactory } from 'three/addons/webxr/XRControllerModelFactory.js';
-
+import { XRControllerModelFactory } from 'three/addons/webxr/XRControllerModelFactory.js'; 
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 let container;
 let camera, scene, renderer;
 let controller1, controller2;
@@ -14,10 +15,9 @@ const intersected = [];
 
 let controls, group;
 
-init();
-animate();
+init(animate); 
 
-function init() {
+async function init(animate) {
 
     container = document.createElement( 'div' );
     document.body.appendChild( container );
@@ -31,14 +31,32 @@ function init() {
     controls = new OrbitControls( camera, container );
     controls.target.set( 0, 1.6, 0 );
     controls.update();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('/draco/');
+    const gltfLoader = new GLTFLoader();
+    gltfLoader.setDRACOLoader(dracoLoader);
+
+//    const gltf = await gltfLoader.loadAsync('/models/kira.glb');
+//    console.log(gltf,'gltf')
+//     scene.add(gltf.scene);
+
 
     const floorGeometry = new THREE.PlaneGeometry( 6, 6 );
     const floorMaterial = new THREE.ShadowMaterial( { opacity: 0.25, blending: THREE.CustomBlending, transparent: false } );
     const floor = new THREE.Mesh( floorGeometry, floorMaterial );
     floor.rotation.x = - Math.PI / 2;
     floor.receiveShadow = true;
-    // scene.add( floor );
+    scene.add( floor );
 
+
+    // const room = new THREE.Mesh(
+    //     new THREE.BoxGeometry(  20, 20, 20 ),
+    //     new THREE.MeshBasicMaterial( {
+    //         color: 0xff0000, wireframe: true
+    //     } )
+    // );
+    // // room.geometry.translate( 0, 3, 0 );
+    // scene.add(room)
     scene.add( new THREE.HemisphereLight( 0xbcbcbc, 0xa5a5a5, 3 ) );
 
     const light = new THREE.DirectionalLight( 0xffffff, 3 );
@@ -139,7 +157,7 @@ function init() {
     //
 
     window.addEventListener( 'resize', onWindowResize );
-
+    animate()
 }
 
 function onWindowResize() {
