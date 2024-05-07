@@ -11,7 +11,7 @@ import { XRButton } from 'three/addons/webxr/XRButton.js';
 let scene, camera, renderer, orbitControls, transformControls;
 let mirrorSphereCamera;
 let controller1, controller2;
-let controllerGrip1, controllerGrip2;
+let controllerGrip1, controllerGrip2, ambientLight;
 
 let raycaster, gltf, group;
 
@@ -28,16 +28,15 @@ async function init(animate) {
 
   
     scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0xffffff, .17);
-    scene.background = new THREE.Color(0xffffff);
+    scene.fog = new THREE.FogExp2(0x808080, .17);
+    scene.background = new THREE.Color(0x000000, .01);
 
     camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.001, 5000);
     camera.position.set(0, 1.6, 0);
     camera.lookAt(scene.position);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 8); // soft white light
-    scene.add(ambientLight);
-
+    ambientLight = new THREE.AmbientLight(0xffffff, 5); // soft white light
+    // scene.add(ambientLight)
     renderer = new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -60,9 +59,32 @@ async function init(animate) {
     const gltff = await gltfLoader.loadAsync('/models/output.glb' );
 
 
-
+    console.log(gltff,'l')
     group = new THREE.Group();
     scene.add( group );
+
+
+    var loader1 = new THREE.TextureLoader();
+
+// Load an image file into a custom material
+var material1 = new THREE.MeshLambertMaterial({
+  map: loader1.load('/models/image.jpeg')
+});
+
+// create a plane geometry for the image with a width of 10
+// and a height that preserves the image's aspect ratio
+var geometry1 = new THREE.PlaneGeometry(1.5, 2.5);
+
+// combine our image geometry and material into a mesh
+var mesh1 = new THREE.Mesh(geometry1, material1);
+
+// set the position of the image mesh in the x,y,z dimensions
+mesh1.position.set(-1,3,3)
+mesh1.rotation.y = 2
+// add the image to the scene
+scene.add(mesh1);   
+
+
     const geometries = [
         new THREE.BoxGeometry( 0.2, 0.2, 0.2 ),
         new THREE.ConeGeometry( 0.2, 0.2, 64 ),
@@ -226,6 +248,7 @@ document.body.appendChild( XRButton.createButton( renderer, { 'optionalFeatures'
 
 
 function onSelectStart( event ) {
+    scene.add(ambientLight);
 
     const controller = event.target;
 
@@ -248,6 +271,7 @@ function onSelectStart( event ) {
 }
 
 function onSelectEnd( event ) {
+    scene.remove(ambientLight);
 
     const controller = event.target;
 
