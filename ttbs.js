@@ -183,11 +183,15 @@ scene.add(mesh1);
      controller1 = renderer.xr.getController( 0 );
      controller1.addEventListener( 'selectstart', onSelectStart );
      controller1.addEventListener( 'selectend', onSelectEnd );
+     controller1.addEventListener( 'squeezestart', onSelectStart1 );
+     controller1.addEventListener( 'squeezeend', onSelectEnd1 );
      scene.add( controller1 );
  
      controller2 = renderer.xr.getController( 1 );
      controller2.addEventListener( 'selectstart', onSelectStart );
      controller2.addEventListener( 'selectend', onSelectEnd );
+     controller2.addEventListener( 'squeezestart', onSelectStart1 );
+     controller2.addEventListener( 'squeezeend', onSelectEnd1 );
      scene.add( controller2 );
  
      const controllerModelFactory = new XRControllerModelFactory();
@@ -248,7 +252,7 @@ document.body.appendChild( XRButton.createButton( renderer, { 'optionalFeatures'
 
 
 function onSelectStart( event ) {
-    scene.add(ambientLight);
+    // scene.add(ambientLight);
 
     const controller = event.target;
 
@@ -269,9 +273,23 @@ function onSelectStart( event ) {
     controller.userData.targetRayMode = event.data.targetRayMode;
 
 }
+function onSelectStart1( event ) {
+    scene.add(ambientLight);
+
+    
+
+}
+
+function onSelectEnd1( event ) {
+    scene.remove(ambientLight);
+ 
+
+}
+
+
 
 function onSelectEnd( event ) {
-    scene.remove(ambientLight);
+    // scene.remove(ambientLight);
 
     const controller = event.target;
 
