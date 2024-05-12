@@ -142,12 +142,12 @@ scene.add(mesh1);
     // }
 
 
-    const switchGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.2);
+    const switchGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
     switchMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     switchMesh = new THREE.Mesh(switchGeometry, switchMaterial); 
-    switchMesh.position.x = 0;
-    switchMesh.position.y = 2;
-    switchMesh.position.z = 0;
+    switchMesh.position.x = 1;
+    switchMesh.position.y = 1.5;
+    switchMesh.position.z = 3;
     switchMesh.name='lightSwitch'
     group.add(switchMesh);
 
