@@ -13,7 +13,7 @@ let mirrorSphereCamera;
 let controller1, controller2;
 let controllerGrip1, controllerGrip2, ambientLight;
 
-let raycaster, gltf, group;
+let raycaster, gltf, group,switchMaterial, switchMesh;
 
 const intersected = [];
 
@@ -132,8 +132,49 @@ scene.add(mesh1);
     //     if (n.name === 'Kira_Shirt_left') OOI.kira = n;
 
     // });
-    // scene.add(gltf.scene);
     scene.add(gltff.scene);
+    // console.log(gltff,'kk')
+    // for(let i = 0; i<gltff.scene.children.length; i++){
+    //     if(i == 24){
+
+    //         group.add(gltff.scene.children[i]); 
+    //     }
+    // }
+
+
+    const switchGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.2);
+    switchMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    switchMesh = new THREE.Mesh(switchGeometry, switchMaterial); 
+    switchMesh.position.x = 0;
+    switchMesh.position.y = 2;
+    switchMesh.position.z = 0;
+    switchMesh.name='lightSwitch'
+    group.add(switchMesh);
+
+   
+
+    // Toggle switch state
+  
+
+    const mouse = new THREE.Vector2();
+
+
+window.addEventListener('click', (event) => {
+    // Calculate mouse position in normalized device coordinates
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    // Update the picking ray with the camera and mouse position
+    raycaster.setFromCamera(mouse, camera);
+
+    // Calculate objects intersecting the picking ray
+    const intersects = raycaster.intersectObjects(scene.children);
+
+    // Check if the switch was clicked
+    if (intersects.length > 0 && intersects[0].object === switchMesh) {
+        toggleSwitch();
+    }
+});
 
 
     // orbitControls.target.copy(OOI.sphere.position); // orbit controls lookAt the sphere
@@ -183,15 +224,15 @@ scene.add(mesh1);
      controller1 = renderer.xr.getController( 0 );
      controller1.addEventListener( 'selectstart', onSelectStart );
      controller1.addEventListener( 'selectend', onSelectEnd );
-     controller1.addEventListener( 'squeezestart', onSelectStart1 );
-     controller1.addEventListener( 'squeezeend', onSelectEnd1 );
+     controller1.addEventListener( 'select', selectHandler );
+    //  controller1.addEventListener( 'squeezeend', onSelectEnd1 );
      scene.add( controller1 );
  
      controller2 = renderer.xr.getController( 1 );
      controller2.addEventListener( 'selectstart', onSelectStart );
      controller2.addEventListener( 'selectend', onSelectEnd );
-     controller2.addEventListener( 'squeezestart', onSelectStart1 );
-     controller2.addEventListener( 'squeezeend', onSelectEnd1 );
+     controller2.addEventListener( 'select', selectHandler );
+    //  controller2.addEventListener( 'squeezeend', onSelectEnd1 );
      scene.add( controller2 );
  
      const controllerModelFactory = new XRControllerModelFactory();
@@ -254,8 +295,8 @@ document.body.appendChild( XRButton.createButton( renderer, { 'optionalFeatures'
 function onSelectStart( event ) {
     // scene.add(ambientLight);
 
-    const controller = event.target;
-
+    const controller = event.target; 
+    console.log(controller,'ffffevenrt')
     const intersections = getIntersections( controller );
 
     if ( intersections.length > 0 ) {
@@ -263,9 +304,11 @@ function onSelectStart( event ) {
         const intersection = intersections[ 0 ];
 
         const object = intersection.object;
+        if(object == switchMesh){
+            return
+        }
         object.material.emissive.b = 1;
         controller.attach( object );
-
         controller.userData.selected = object;
 
     }
@@ -273,10 +316,33 @@ function onSelectStart( event ) {
     controller.userData.targetRayMode = event.data.targetRayMode;
 
 }
-function onSelectStart1( event ) {
-    scene.add(ambientLight);
 
+let isSwitchOn = false; 
+function toggleSwitch() {
+    isSwitchOn = !isSwitchOn;
+    if(isSwitchOn){
+        scene.add(ambientLight);
+    }else{
+        scene.remove(ambientLight);
+    }
+    switchMaterial.color.set(!isSwitchOn ? 0x00ff00 : 0xff0000); // Green if on, red if off
+}
+
+
+function selectHandler( event ) {
     
+    const controller = event.target; 
+    console.log(controller,'ffffevenrt')
+    const intersections = getIntersections( controller );
+
+    if ( intersections.length > 0 ) {
+
+        const intersection = intersections[ 0 ];
+        if(intersection.object == switchMesh){
+            toggleSwitch()
+        }
+
+    }
 
 }
 
@@ -296,6 +362,9 @@ function onSelectEnd( event ) {
     if ( controller.userData.selected !== undefined ) {
 
         const object = controller.userData.selected;
+        if(object == switchMesh){
+            return
+        }
         object.material.emissive.b = 0;
         group.attach( object );
 
@@ -356,6 +425,7 @@ function cleanIntersected() {
     }
 
 }
+
 
 
 function animate (){
