@@ -29,10 +29,12 @@ async function init(animate) {
   
     scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x808080, .17);
-    scene.background = new THREE.Color(0x000000, .01);
+    scene.background = new THREE.Color(0xffffff);
 
     camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.001, 5000);
-    camera.position.set(0, 1.6, 0);
+    // camera.position.set(0, 1.6, 0);
+    camera.position.set(5.21, 1.6, 3.97);
+
     camera.lookAt(scene.position);
 
     ambientLight = new THREE.AmbientLight(0xffffff, 5); // soft white light
