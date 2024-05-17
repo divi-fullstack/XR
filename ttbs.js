@@ -41,9 +41,9 @@ async function init(animate) {
     camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.001, 5000);
     camera.position.set(10, 4, 40);
     // camera.position.set(5.21, 1.6, 3.97);
-    scene.rotation.x=0
-    scene.rotation.y=1.56
-    scene.rotation.z=0
+    // scene.rotation.x = 0
+    // scene.rotation.y = 1.56
+    // scene.rotation.z = 0
 
     camera.lookAt(scene.position);
 
@@ -51,7 +51,7 @@ async function init(animate) {
     // scene.add(ambientLight)
 
     room = new Room(ROOM_LENGTH, ROOM_HEIGHT, ROOM_WIDTH);
-    scene.add(room.object);  
+    scene.add(room.object);
     const sunLight = new THREE.DirectionalLight(0xc8f0f9, 1.96)
     sunLight.position.set(-69, 44, 14)
     scene.add(sunLight)
@@ -160,47 +160,64 @@ async function init(animate) {
     // }
 
 
-    const loaderf = new FontLoader(); 
-loaderf.load( 'fonts/gentilis_bold.typeface.json', function ( font ) {
+    const loaderf = new FontLoader();
+    loaderf.load('fonts/gentilis_bold.typeface.json', function (font) {
 
- const wall_material_text = new TextGeometry( 'techindo systems pvt ltd', {
-    font: font,
-    size: .9,
-    depth: 0.2,
-   
-} );
-const material = new THREE.MeshStandardMaterial({
-    color: 0x0097DD0,
-    roughness: 0.7,
-    metalness: 0.0
-});
+        const wall_material_text = new TextGeometry('techindo systems pvt ltd', {
+            font: font,
+            size: .9,
+            depth: 0.2,
 
-const object = new THREE.Mesh(wall_material_text, material);
-    object.position.set(-20.5,4,-10)
-    object.rotation.x=0
-    object.rotation.y=4.7
-    object.rotation.z=0
+        });
+        const material = new THREE.MeshStandardMaterial({
+            color: 0x0097DD0,
+            roughness: 0.7,
+            metalness: 0.0
+        });
 
-scene.add(object)
-} );
+        const object = new THREE.Mesh(wall_material_text, material);
+        object.position.set(-8, 4.7, 16)
+        // object.rotation.x = 0
+        // object.rotation.y = 4.7
+        // object.rotation.z = 0
 
-
+        scene.add(object)
+    });
 
 
-    const switchGeometry = new THREE.BoxGeometry(1, 1, 0.2);
+
+
+    const switchGeometry = new THREE.BoxGeometry(1, 1, 0.5);
     switchMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     switchMesh = new THREE.Mesh(switchGeometry, switchMaterial);
-    switchMesh.position.x = -15;
+    switchMesh.position.x = 19;
     switchMesh.position.y = 3;
-    switchMesh.position.z = 14.5;
+    switchMesh.position.z = 15;
     switchMesh.name = 'lightSwitch'
     group.add(switchMesh);
     const s = switchMesh.clone()
-  s.position.x = -0;
+    s.position.x = -0;
     s.position.y = 2;
     s.position.z = -2.5;
     s.name = 'lightSwitch'
     group.add(s);
+
+    const c1 = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.2), new THREE.MeshBasicMaterial({ color: 0x000000 }));
+    c1.position.x = -3;
+    c1.position.y = 2;
+    c1.position.z = -2.5;
+    c1.name = 'c1'
+    group.add(c1);
+
+
+    const c2 = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.2), new THREE.MeshBasicMaterial({ color: 0x0000ff }));
+    c2.position.x = -3;
+    c2.position.y = 1;
+    c2.position.z = -2.8;
+    c2.name = 'c2'
+    group.add(c2);
+
+
 
     // Toggle switch state
 
@@ -220,9 +237,18 @@ scene.add(object)
         const intersects = raycaster.intersectObjects(scene.children);
 
         // Check if the switch was clicked
-        console.log(intersects[0].object,'intersects[0].object')
+        console.log(intersects[0].object, 'intersects[0].object')
         if (intersects.length > 0 && intersects[0].object.name === "lightSwitch") {
             toggleSwitch();
+        }
+
+
+
+        if (intersects.length > 0 && intersects[0].object.name === "c1") {
+            goToCabin1()
+        }
+        if (intersects.length > 0 && intersects[0].object.name === "c2") {
+            goToCabin2()
         }
     });
 
@@ -370,7 +396,7 @@ function onSelectStart(event) {
 
 let isSwitchOn = false;
 function toggleSwitch() {
-  
+
     isSwitchOn = !isSwitchOn;
     if (isSwitchOn) {
         scene.add(ambientLight);
@@ -381,10 +407,10 @@ function toggleSwitch() {
             duration: 3,
             ease: "power1.inOut",
             onUpdate: function () {
-              camera.lookAt(new THREE.Vector3(0, 0, 0))
+                camera.lookAt(new THREE.Vector3(0, 0, 0))
             },
-      //showcasing 1st view
-          })  
+            //showcasing 1st view
+        })
     } else {
         scene.remove(ambientLight);
         gsap.to(camera.position, {
@@ -394,15 +420,44 @@ function toggleSwitch() {
             duration: 3,
             ease: "power1.inOut",
             onUpdate: function () {
-              camera.lookAt(new THREE.Vector3(0, 0, 0))
+                camera.lookAt(new THREE.Vector3(0, 0, 0))
             },
-      //showcasing 1st view
-          })  
+            //showcasing 1st view
+        })
     }
     switchMaterial.color.set(!isSwitchOn ? 0x00ff00 : 0xff0000); // Green if on, red if off
 }
 
 
+function goToCabin1() {
+    gsap.to(camera.position, {
+        x: -4.27,
+        y: 2.41,
+        z: -6.185,
+        duration: 3,
+        ease: "power1.inOut",
+        onUpdate: function () {
+            camera.lookAt(new THREE.Vector3(0, 0, 0))
+        },
+        //showcasing 1st view
+    })
+}
+function goToCabin2() {
+    gsap.to(camera.position, {
+        x: 8.15,
+        y: 5.45,
+        z: 10.47,
+        duration: 3,
+        ease: "power1.inOut",
+        onUpdate: function () {
+        //     // scene.rotation.x = 1.23
+        //     scene.rotation.y = -1.43
+        //     // scene.rotation.z = 3
+        camera.lookAt(new THREE.Vector3(0, 0, 0))
+        },
+        //showcasing 1st view
+    })
+}
 function selectHandler(event) {
 
     // console.log('her',  camera.position.set(10, 4, 40))
@@ -413,8 +468,14 @@ function selectHandler(event) {
     if (intersections.length > 0) {
 
         const intersection = intersections[0];
-        if (intersection.object == switchMesh) {
+        if (intersection.object.name == "lightSwitch") {
             toggleSwitch()
+        }
+        if (intersection.object.name == "c1") {
+            goToCabin1()
+        }
+        if (intersection.object.name == "c2") {
+            goToCabin2()
         }
 
     }
@@ -505,7 +566,7 @@ function cleanIntersected() {
 
 function animate() {
     renderer.setAnimationLoop(function () {
-
+        // console.log(camera.position)
         // animate()
         // cleanIntersected();
 

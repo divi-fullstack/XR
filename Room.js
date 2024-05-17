@@ -85,18 +85,18 @@ export default class Room {
             },
             "Back": {
                 "name" : "Front",
-                "width": 40,
+                "width": 40-DOOR_SIZE/2,
                 "height": 6,
-                "position": [0,3,15],
+                "position": [-5,3,15],
                 "rotation": [0,0,0],
                 "material": wall_material,
                 "Wall": null
             }, 
             "Left": {
                 "name" : "Left",
-                "width": 30-DOOR_SIZE/2,
+                "width": 30,
                 "height": 6,
-                "position": [-20,3,-5],
+                "position": [-20,3,0],
                 "rotation": [0,Math.PI/2,0],
                 "material": wall_material,
                 "Wall": null
