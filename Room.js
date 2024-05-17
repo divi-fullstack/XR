@@ -187,36 +187,36 @@ export default class Room {
         recompute_all_bounding_boxes(this);
     }
     
-    inside_solid(vec){
-        for (var i = 0; i < this.bounding_boxes.length; i++){
-            var box = this.bounding_boxes[i];
-            if (box.containsPoint(vec)){
-                return true;
-            }
-        }
-        return false;
-    }
+    // inside_solid(vec){
+    //     for (var i = 0; i < this.bounding_boxes.length; i++){
+    //         var box = this.bounding_boxes[i];
+    //         if (box.containsPoint(vec)){
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
     
-    ray_intersects(ray){
-        for (var i = 0; i < this.bounding_boxes.length; i++){
+    // ray_intersects(ray){
+    //     for (var i = 0; i < this.bounding_boxes.length; i++){
             
-            var box = this.bounding_boxes[i];
-            if (ray.intersectsBox(box)){
-                return true;
-            }
-        }
-        return false;
-    }
+    //         var box = this.bounding_boxes[i];
+    //         if (ray.intersectsBox(box)){
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
     
-    triangle_intersects(triangle){
-        for (var i = 0; i < this.bounding_boxes.length; i++){
-            console.log("Checking box " + String(i));
-            var box = this.bounding_boxes[i];
-            if (box.intersectsTriangle(triangle)){
-                return true;
-            }
-        }
-        return false;
-    }
+    // triangle_intersects(triangle){
+    //     for (var i = 0; i < this.bounding_boxes.length; i++){
+    //         console.log("Checking box " + String(i));
+    //         var box = this.bounding_boxes[i];
+    //         if (box.intersectsTriangle(triangle)){
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
 }
 

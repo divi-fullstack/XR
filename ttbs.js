@@ -329,10 +329,8 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 
 }
-if (renderer?.xr) {
-    renderer.xr.enabled = true;
+renderer.xr.enabled = true;
 
-}
 
 // document.body.appendChild( VRButton.createButton( renderer ) );
 document.body.appendChild(XRButton.createButton(renderer, { 'optionalFeatures': ['depth-sensing'] }));
@@ -517,7 +515,7 @@ function animate() {
 
         // }
 
-        orbitControls.update();
+        // orbitControls.update();
         renderer.render(scene, camera);
 
     });
