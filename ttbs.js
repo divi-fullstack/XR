@@ -384,7 +384,11 @@ function onSelectStart(event) {
         if (object == switchMesh) {
             return
         }
-        object.material.emissive.b = 1;
+        console.log(object,'object')
+        if(object.material.emissive){
+            object.material.emissive.b = 1;
+
+        }
         controller.attach(object);
         controller.userData.selected = object;
 
@@ -501,7 +505,10 @@ function onSelectEnd(event) {
         if (object == switchMesh) {
             return
         }
-        object.material.emissive.b = 0;
+        if(object.material.emissive){
+            object.material.emissive.b = 0;
+
+        }
         group.attach(object);
 
         controller.userData.selected = undefined;
@@ -538,7 +545,10 @@ function intersectObjects(controller) {
         const intersection = intersections[0];
 
         const object = intersection.object;
-        object.material.emissive.r = 1;
+        if(object.material.emissive){
+            object.material.emissive.r = 1;
+
+        }
         intersected.push(object);
 
         line.scale.z = intersection.distance;
@@ -556,7 +566,10 @@ function cleanIntersected() {
     while (intersected.length) {
 
         const object = intersected.pop();
-        object.material.emissive.r = 0;
+        if(object.material.emissive){
+            object.material.emissive.r = 0;
+
+        }
 
     }
 
