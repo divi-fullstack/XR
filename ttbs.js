@@ -96,7 +96,7 @@ async function init(animate) {
     var mesh1 = new THREE.Mesh(geometry1, material1);
 
     // set the position of the image mesh in the x,y,z dimensions
-    mesh1.position.set(-1, 3, 3)
+    mesh1.position.set(-18, 3, 3)
     mesh1.rotation.y = 2
     // add the image to the scene
     scene.add(mesh1);
