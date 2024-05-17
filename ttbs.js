@@ -195,8 +195,12 @@ scene.add(object)
     switchMesh.position.z = 14.5;
     switchMesh.name = 'lightSwitch'
     group.add(switchMesh);
-
-
+    const s = switchMesh.clone()
+  s.position.x = -0;
+    s.position.y = 2;
+    s.position.z = -2.5;
+    s.name = 'lightSwitch'
+    group.add(s);
 
     // Toggle switch state
 
@@ -216,7 +220,8 @@ scene.add(object)
         const intersects = raycaster.intersectObjects(scene.children);
 
         // Check if the switch was clicked
-        if (intersects.length > 0 && intersects[0].object === switchMesh) {
+        console.log(intersects[0].object,'intersects[0].object')
+        if (intersects.length > 0 && intersects[0].object.name === "lightSwitch") {
             toggleSwitch();
         }
     });
@@ -365,11 +370,34 @@ function onSelectStart(event) {
 
 let isSwitchOn = false;
 function toggleSwitch() {
+  
     isSwitchOn = !isSwitchOn;
     if (isSwitchOn) {
         scene.add(ambientLight);
+        gsap.to(camera.position, {
+            x: 0,
+            y: 2,
+            z: 6,
+            duration: 3,
+            ease: "power1.inOut",
+            onUpdate: function () {
+              camera.lookAt(new THREE.Vector3(0, 0, 0))
+            },
+      //showcasing 1st view
+          })  
     } else {
         scene.remove(ambientLight);
+        gsap.to(camera.position, {
+            x: 10,
+            y: 4,
+            z: 40,
+            duration: 3,
+            ease: "power1.inOut",
+            onUpdate: function () {
+              camera.lookAt(new THREE.Vector3(0, 0, 0))
+            },
+      //showcasing 1st view
+          })  
     }
     switchMaterial.color.set(!isSwitchOn ? 0x00ff00 : 0xff0000); // Green if on, red if off
 }
@@ -377,6 +405,7 @@ function toggleSwitch() {
 
 function selectHandler(event) {
 
+    // console.log('her',  camera.position.set(10, 4, 40))
     const controller = event.target;
     console.log(controller, 'ffffevenrt')
     const intersections = getIntersections(controller);
